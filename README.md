@@ -1,6 +1,5 @@
 # scalikeJDBCの挙動を確認する
 ## scalikeJDBCは基本的に同期的な処理しか提供していない
-- futureLocalTxを使うと自作IOを上手く扱えなかった（構造を変えればうまくいけそう） 
 - 非同期処理を行うwrapperを自作する
 ## 自作wrapperでtransaction境界を作ってcomit/rollbackが出来ることを確認する
 - localTx: 一連のIOの中で例外がある場合はcommitせずにrollbackする事を確認する

@@ -17,13 +17,15 @@ object Foo {
 
 object FooRepository {
 
-  def create(foo: Foo): DBIO[Unit] = DBIO(
-    implicit session =>
-      sql"""INSERT INTO foos (id, name) VALUES (${foo.id}, ${foo.name})"""
-        .update.apply()
-  )
+  def create(foo: Foo): DBIO[Unit] =
+    DBIOFactory.fromDBSession {
+      implicit session => {
+        sql"""INSERT INTO foos (id, name) VALUES (${foo.id}, ${foo.name})"""
+          .update.apply()
+      }
+    }
 
-  def fetch(id: String): DBIO[Option[Foo]] = DBIO(
+  def fetch(id: String): DBIO[Option[Foo]] = DBIOFactory.fromDBSession(
     implicit session =>
       sql"""SELECT id, name FROM Foos
            |WHERE id = ${id}""".stripMargin
@@ -31,7 +33,7 @@ object FooRepository {
 
   )
 
-  def update(foo: Foo): DBIO[Unit] = DBIO(
+  def update(foo: Foo): DBIO[Unit] = DBIOFactory.fromDBSession(
     implicit session =>
       sql"""UPDATE Foo SET name=${foo.name} WHERE id = ${foo.id}"""
         .update.apply()
